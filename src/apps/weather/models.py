@@ -7,9 +7,3 @@ class City(models.Model):
 
     def __str__(self):
         return self.name
-
-
-class SearchHistory(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
-    city = models.ForeignKey(City, on_delete=models.CASCADE)
-    searched_at = models.DateTimeField(auto_now_add=True)

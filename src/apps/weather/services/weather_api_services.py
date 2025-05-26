@@ -5,6 +5,7 @@ import httpx
 
 class WeatherServices:
 
+    @staticmethod
     def get_coordinates(self, city_name: str) -> tuple[float, float] | None:
         url = "https://nominatim.openstreetmap.org/search"
         with httpx.Client(headers={"User-Agent": "weather-app"}) as client:
@@ -75,3 +76,6 @@ class WeatherServices:
                     "lon": float(item.get("lon"))
                 })
             return results
+
+    def create_stats(self):
+        self.repository.create_stats()
