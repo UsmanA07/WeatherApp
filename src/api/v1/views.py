@@ -1,16 +1,24 @@
-import asyncio
-
-from rest_framework.response import Response
 from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework import status
+
 from apps.weather.services.weather_api_services import WeatherServices
 
 
 class WeatherView(APIView):
+    service = WeatherServices()
+
     def get(self, request):
         city_name = request.query_params.get("city")
-        services = WeatherServices()
-        coords = asyncio.run(services.get_coordinates(city_name))
+        if not city_name:
+            return Response({"error": "City is required"}, status=status.HTTP_400_BAD_REQUEST)
 
-        inf = asyncio.run(services.get_weather_forecast(coords[0], coords[1]))
-        inf1 = services.format_weather_data(inf)
-        return Response(inf)
+        coords = self.service.get_coordinates(city_name)
+        if coords is None:
+            return Response(
+                {"error": "Похоже, вы неправильно ввели название города"},
+                status=status.HTTP_404_NOT_FOUND
+            )
+
+        forecast = self.service.get_weather_forecast(*coords)
+        return Response(forecast)

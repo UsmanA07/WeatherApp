@@ -1,27 +1,26 @@
 from datetime import datetime
-
 import httpx
 
 
 class WeatherServices:
 
-    async def get_coordinates(self, city_name: str) -> tuple[float, float] | None:
+    def get_coordinates(self, city_name: str) -> tuple[float, float] | None:
         url = "https://nominatim.openstreetmap.org/search"
-        async with httpx.AsyncClient() as client:
-            response = await client.get(url, params={
+        with httpx.Client(headers={"User-Agent": "weather-app"}) as client:
+            response = client.get(url, params={
                 "q": city_name,
                 "format": "json",
                 "limit": 1
-            }, headers={"User-Agent": "weather-app"})
+            })
             data = response.json()
             if not data:
                 return None
             return float(data[0]["lat"]), float(data[0]["lon"])
 
-    async def get_weather_forecast(self, lat: float, lon: float) -> dict:
+    def get_weather_forecast(self, lat: float, lon: float) -> dict:
         url = "https://api.open-meteo.com/v1/forecast"
-        async with httpx.AsyncClient() as client:
-            response = await client.get(url, params={
+        with httpx.Client() as client:
+            response = client.get(url, params={
                 "latitude": lat,
                 "longitude": lon,
                 "current_weather": True,
