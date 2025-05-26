@@ -1,4 +1,5 @@
 from datetime import datetime
+
 import httpx
 
 
@@ -55,3 +56,22 @@ class WeatherServices:
             })
 
         return result
+
+    def autocomplete_city(self, query: str, limit: int = 5) -> list[dict]:
+        url = "https://nominatim.openstreetmap.org/search"
+        with httpx.Client(headers={"User-Agent": "weather-app"}) as client:
+            response = client.get(url, params={
+                "q": query,
+                "format": "json",
+                "limit": limit,
+                "addressdetails": 0
+            })
+            data = response.json()
+            results = []
+            for item in data:
+                results.append({
+                    "name": item.get("display_name"),
+                    "lat": float(item.get("lat")),
+                    "lon": float(item.get("lon"))
+                })
+            return results
