@@ -12,18 +12,22 @@ services:
 
   backend:
     build: .
+    dns:
+      - 8.8.8.8
     command: >
       sh -c "python src/manage.py migrate &&
              python src/manage.py collectstatic --noinput &&
              python src/manage.py runserver 0.0.0.0:8000"
     environment:
       DATABASE_URL: postgres://adminuser:password@db:5432/socnetwork
-      SECRET_KEY: django-insecure-if893pf70k-!=fg*$5$4k*3l#+e!*ubu3q^zwmm8zt+1em4^4+
+      SECRET_KEY: django-insecure-5=@mco9d#cy@0&hm6e^!xt=p9x@cuhw8p5$4re78_fv#-*l#0z
     volumes:
       - static_volume:/app/src/static
       - media_volume:/app/src/media
     depends_on:
       - db
+    ports:
+      - "8000:8000"
     networks:
       - app-network
 

@@ -1,3 +1,5 @@
+from django.http import HttpResponse
+from rest_framework.renderers import JSONRenderer
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
@@ -27,7 +29,9 @@ class WeatherView(APIView):
             )
 
         forecast = self.service.get_weather_forecast(*coords)
-        response = Response(forecast)
+        json_data = JSONRenderer().render(forecast)
+        response = Response(json_data, content_type="application/json; charset=utf-8")
+
         max_age = 30 * 24 * 60 * 60
         if request.query_params.get("city"):
             response.set_cookie("last_city", city_name, max_age=max_age)

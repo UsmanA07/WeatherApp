@@ -6,7 +6,7 @@ import httpx
 class WeatherServices:
 
     @staticmethod
-    def get_coordinates(self, city_name: str) -> tuple[float, float] | None:
+    def get_coordinates(city_name: str) -> tuple[float, float] | None:
         url = "https://nominatim.openstreetmap.org/search"
         with httpx.Client(headers={"User-Agent": "weather-app"}) as client:
             response = client.get(url, params={
@@ -32,7 +32,8 @@ class WeatherServices:
             data = response.json()
             return self.format_weather_data(data)
 
-    def format_weather_data(self, data: dict) -> dict:
+    @staticmethod
+    def format_weather_data(data: dict) -> dict:
         current = data.get("current_weather", {})
         hourly = data.get("hourly", {})
 
@@ -58,7 +59,8 @@ class WeatherServices:
 
         return result
 
-    def autocomplete_city(self, query: str, limit: int = 5) -> list[dict]:
+    @staticmethod
+    def autocomplete_city(query: str, limit: int = 5) -> list[dict]:
         url = "https://nominatim.openstreetmap.org/search"
         with httpx.Client(headers={"User-Agent": "weather-app"}) as client:
             response = client.get(url, params={
@@ -76,6 +78,3 @@ class WeatherServices:
                     "lon": float(item.get("lon"))
                 })
             return results
-
-    def create_stats(self):
-        self.repository.create_stats()

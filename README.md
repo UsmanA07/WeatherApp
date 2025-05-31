@@ -4,47 +4,52 @@
 
 ### Что реализовано
 
-[x] Получение прогноза погоды по названию города (OpenMeteo API)
+- Получение прогноза погоды по названию города (OpenMeteo API)
 
-[x] Удобный формат вывода погоды (текущая + прогноз на несколько часов)
+- Удобный формат вывода погоды (текущая + прогноз на несколько часов)
 
-[x] Автодополнение (подсказки) при вводе города (через Nominatim API)
+- Автодополнение (подсказки) при вводе города (через Nominatim API)
 
-[x] Сохранение последнего введённого города в cookies
+- Сохранение последнего введённого города в cookies
 
-[x] История запросов по IP-адресу
-
-[x] API со статистикой: сколько раз и какие города запрашивались
-
+- API со статистикой: сколько раз и какие города запрашивались
 
 ### Технологии
 
-Python 3.13
+- Python 3.13
 
-Poetry — управление зависимостями и запуск
+- Poetry - управление зависимостями и запуск
 
-Django 5 + Django REST Framework
+- Django 5 + Django REST Framework
 
-httpx — асинхронные запросы к внешним API
+- httpx - запросы к внешним API
 
-PostgreSQL — основная БД
+- PostgreSQL - основная БД
 
-Docker — заготовка под контейнеризацию
-
-
+- Docker - заготовка под контейнеризацию
 
 ---
 
-Установка и запуск (Poetry + локально)
-``` docker-compose up --build ```
+### Установка и запуск
+
+1. **Клонируйте репозиторий**:
+
+   ```bash
+   git clone https://github.com/UsmanA07/drf-social-network.git
+   cd drf-social-network
+   ```
+
+2. Запустите docker и создайте superuser
+
+   ```bash
+    docker-compose up --build
+    sudo docker exec -it weatherapp-backend-1 python src/manage.py createsuperuser
+    ```
 
 ---
 
-Эндпоинты
+### Эндпоинты
 
-Method Endpoint Описание
-
-GET /weather/?city=Berlin Прогноз погоды
-GET /weather/ Прогноз по последнему городу из куки
-GET /weather/autocomplete/ Подсказки по вводу города (?query=...)
-GET /weather/stats/ Статистика по популярности городов
+- **GET** `/api/weather/?city=Berlin` - Прогноз погоды
+- **GET** `/api/weather/` - Прогноз по последнему городу из куки
+- **GET** `/api/weather/autocomplete/` - Подсказки по вводу города (?query=...)
